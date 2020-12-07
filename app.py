@@ -133,7 +133,6 @@ def main():
 		exit(CREATE_ARCHIVE_PATH_ERROR_CODE)
 
 	try:
-		pass
 		names = os.listdir(report_path)		# Список имен файлов в папке с отчетами
 		# Отправляем в обработчик каждый найденный файл
 		for name in names:
@@ -221,10 +220,13 @@ def compression(path: str, archive_path: str):
 			try:
 				result = re.match(r'(\d{4})', name)
 				if result is not None:
-					# Если папка состоит из 4 цифр создаем список содержимого этой папки
+					# Если папка состоит из 4 цифр создаем список содержимого этой папки (кривовато)
 					months = os.listdir(fullname)
-					if len(months) < 10:
+					if len(months) <= 11:
 						event.log(f'В {name} нехватает каталогов. Должно быть 12.')
+						continue
+					if len(months) > 12:
+						event.log(f'В {name} каталогов больше чем должно быть, а должно быть 12.')
 						continue
 
 					miss_month = None
