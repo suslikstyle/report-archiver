@@ -21,6 +21,9 @@ the script will create a new one.
 *To create an environment use:*
 
 	python -m venv venv && venv\Scripts\activate.bat && pip install -r requirements.txt
+or
+
+	python3 -m venv venv && venv\Scripts\activate.bat && pip install -r requirements.txt
 
 All necessary dependencies are specified in "requirements.txt" to install them, use:
     
