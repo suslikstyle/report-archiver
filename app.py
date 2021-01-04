@@ -39,7 +39,7 @@ class MonthItem(object):
 		"""
 		Инициализация объекта, содержащего в себе информацию об отчетах за месяц
 		:param year: год
-		:param month: месяц
+		:param month: месяц 1..12
 		:param path: каталог, в который переносятся отчеты.
 		"""
 		self._dataSet = []
@@ -47,12 +47,11 @@ class MonthItem(object):
 		self.year = year
 		self.month = month
 		self.path = path
-
-		end_date = datetime.date(year, month + 1, 1) - datetime.timedelta(days=1)
+		end_date = datetime.datetime(year + int(month / 12), ((month % 12) + 1), 1) - datetime.timedelta(days=1)
 		# self._model = [Item(datetime.date(year, month, day), 1) for day in range(1, end_date.day+1, 1)]
 		for day in range(1, end_date.day + 1, 1):
-			self._model.append(Item(datetime.date(year, month, day), 1))
-			self._model.append(Item(datetime.date(year, month, day), 2))
+			self._model.append(Item(datetime.date(year=year, month=month, day=day), 1))
+			self._model.append(Item(datetime.date(year=year, month=month, day=day), 2))
 
 	def __del__(self):
 		del self._dataSet
@@ -176,7 +175,8 @@ def handler(path: str, name: str, archive: str):
 			else:
 				print('Смена может быть I или II.')
 				return
-			if date.month < datetime.datetime.today().month:
+			if datetime.datetime(date.year, date.month, 1) < \
+					datetime.datetime(datetime.datetime.today().year, datetime.datetime.today().month, 1):
 				# Отчеты прошлых месяцев обрабатываются тут
 				new_path = os.path.join(path, f'{date.year}', "{}".format(date.strftime('%m %B')))
 				new_name = os.path.join(new_path, name)
